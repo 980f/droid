@@ -1,18 +1,19 @@
 package pers.hal42.droid;
 
-import pers.hal42.android.*;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class DroidSampler extends GriddedActivity {
-    private void myClick(View view) {
-        myView.format("You are opressing me!");
-    }
+import pers.hal42.android.GriddedActivity;
+import pers.hal42.android.ViewFormatter;
 
+public class DroidSampler extends GriddedActivity {
     ViewFormatter myView;
+
+    private void myClick(View view) {
+        myView.format("\nYou are oppressing me!");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class DroidSampler extends GriddedActivity {
                 myClick(view);
             }
         });
+        button.setText("Press me");
 
     }
 }
