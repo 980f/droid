@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
+import android.widget.Button;
 
 import java.util.List;
 import java.util.Timer;
@@ -52,41 +53,40 @@ public class DroidSampler extends EasyActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    gridManager.setColumnCount(4);
     makeButton("Press me", new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         myClick(v);
       }
     });
+    makeColorButton("Greenish",Color.GREEN);
+    makeColorButton("Redish",Color.RED);
+    makeColorButton("Blueish",Color.BLUE);
+
     myView = makeText();
 
-//    sets = new LinkedList<>();
+  }
 
+  private void makeColorButton(String colorname,final int colorcode) {
+    makeButton(colorname, new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        myView.view.setBackgroundColor(colorcode);
+      }
+    });
   }
 
   /**
    * a triplet of parameters, how long each of the three phases lasts.
    * e.g. 5 minutes green, 2 minutes yellow, 30 seconds red. Total time 7.5 minutes.
    */
-  public static class TimerSet implements Parcelable {
-    public static final Parcelable.Creator<TimerSet> CREATOR = new Parcelable.Creator<TimerSet>() {
-      public TimerSet createFromParcel(Parcel in) {
-        return new TimerSet(in);
-      }
+  public static class TimerSet {
 
-      public TimerSet[] newArray(int size) {
-        return new TimerSet[size];
-      }
-    };
     private int green;
     private int yellow;
     private int red;
 
-    private TimerSet(Parcel in) {
-      green = in.readInt();
-      yellow = in.readInt();
-      red = in.readInt();
-    }
 
     public int totalTime() {
       return green + yellow + red;
@@ -105,19 +105,6 @@ public class DroidSampler extends EasyActivity {
         return Color.BLUE;
       }
     }
-
-    @Override
-    public int describeContents() {
-      return 0;
-    }
-
-    @Override
-    public void writeToParcel(final Parcel parcel, final int i) {
-      parcel.writeInt(green);
-      parcel.writeInt(yellow);
-      parcel.writeInt(red);
-    }
-
 
   }
 }
