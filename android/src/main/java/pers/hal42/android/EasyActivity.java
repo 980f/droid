@@ -19,8 +19,8 @@ public class EasyActivity extends GriddedActivity {
     return button;
   }
 
-  public ViewFormatter makeText() {
-    ViewFormatter view = new ViewFormatter(add(TextView.class));
+  public ViewFormatter makeText(int width) {
+    ViewFormatter view = new ViewFormatter(add(TextView.class,width>0));
     return view;
   }
   //todo: add facility for a click on a text view generating a new activity with a single view which has the same text as the clocked on textview.

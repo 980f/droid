@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 25
@@ -20,6 +21,9 @@ android {
 
     productFlavors {
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 dependencies {
@@ -31,4 +35,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(path: ':android')
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
