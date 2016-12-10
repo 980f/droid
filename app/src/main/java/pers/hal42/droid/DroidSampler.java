@@ -52,7 +52,12 @@ public class DroidSampler extends EasyActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    makeButton("Press me", this::myClick);
+    makeButton("Press me", new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        myClick(v);
+      }
+    });
     myView = makeText();
 
 //    sets = new LinkedList<>();
