@@ -11,9 +11,12 @@ import java.lang.reflect.Constructor;
 
 /**
  * Copyright (C) by andyh created on 10/23/12 at 4:14 PM
+ * An activity with a grid layout.
+ * The number of rows and columns are read from the savedInstanceState bundle indexed by the derived class name, i.e you should extend from GriddActivity rather than just add widgets to a directly instantiated one.
+ * To keep this class uncoupled we shall not add utilties to it, we will derive an class with convenience functions.
  */
 public class GriddedActivity extends Activity {
-  public GridManager gridManager; //todo: change to protected.
+  protected GridManager gridManager; //todo: change to protected.
 
   public int getIntState(Bundle savedInstanceState, String key, int defaultValue){
     return savedInstanceState.getInt(getClass().getCanonicalName()+"."+key,defaultValue);
@@ -28,7 +31,7 @@ public class GriddedActivity extends Activity {
     int columnCount = 1;
     int rows = 0;
     if (savedInstanceState != null) {
-      columnCount = getIntState( savedInstanceState,"columns", 1); //todo: find scope of given bundle to see if we can drop the class specific prefixes in our keys.
+      columnCount = getIntState( savedInstanceState,"columns", 1);
       rows = getIntState(savedInstanceState,"rows", 0);
     }
     if (columnCount > 0) {//don't feed bad value to android
