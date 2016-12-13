@@ -17,6 +17,7 @@ class DroidSampler : EasyActivity() {
 
 
   private fun updateTimeview() {
+    --tremain
     if (currentSet == null) {//#leave non ternary for debug.
       setColor(Color.BLUE)
     } else {
