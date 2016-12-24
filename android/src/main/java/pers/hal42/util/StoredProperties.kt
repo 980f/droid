@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 class StoredProperties {
 
   fun store(thing: Any) {
-    for(val prop in thing.class) {println("p" $prop")}
+//    for(val prop in thing.class) {println("p" $prop")}
 //    val claz= thing::class
 //    for(val annotation in claz.mem) {
 

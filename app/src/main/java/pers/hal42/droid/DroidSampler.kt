@@ -2,28 +2,42 @@ package pers.hal42.droid
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import pers.hal42.android.EasyActivity
 import pers.hal42.android.ViewFormatter
 import java.util.*
+import kotlin.concurrent.timer
 
 
 class DroidSampler : EasyActivity() {
   internal var myView: ViewFormatter? = null
-  internal var countdown: Timer? = null
+  internal var countdown: Timer = java.util.Timer(false)
   internal var sets: List<TimerSet>? = null
-  internal var currentSet: TimerSet? = null
+  internal val currentSet: TimerSet = TimerSet()
   internal var tremain: Int = 0
+  internal val viewUpdater=Handler()
+/*
+    Timer myTimer = new Timer();
+      myTimer.schedule(new TimerTask() {
+         @Override
+         public void run() {UpdateGUI();}
+      }, 0, 1000);
 
+   }
+
+   private void UpdateGUI() {
+      i++;
+      //tv.setText(String.valueOf(i));
+      myHandler.post(myRunnable);
+   }
+
+
+* */
 
   private fun updateTimeview() {
     --tremain
-    if (currentSet == null) {//#leave non ternary for debug.
-      setColor(Color.BLUE)
-    } else {
-      setColor(currentSet!!.colorForTimeRemaining(tremain))
-    }
-
+    setColor(currentSet.colorForTimeRemaining(tremain))
   }
 
   private fun setColor(color: Int) {
@@ -32,11 +46,16 @@ class DroidSampler : EasyActivity() {
 
   //run every second
   fun startTimer() {
-    countdown!!.scheduleAtFixedRate(object : TimerTask() {
+    countdown?.scheduleAtFixedRate(object : TimerTask() {
       override fun run() {
         updateTimeview()
       }
     }, 0, 1000)
+  }
+
+  private fun testTimer(view:View){
+    tremain=50
+    startTimer()
   }
 
   private fun myClick(view: View) {//! the given view is related to the button.
@@ -53,6 +72,8 @@ class DroidSampler : EasyActivity() {
 
     myView = makeText(2)
 
+    makeButton("Start Timer") {v->startTimer()}
+
   }
 
   private fun makeColorButton(colorname: String, colorcode: Int) {
@@ -65,9 +86,9 @@ class DroidSampler : EasyActivity() {
    */
   class TimerSet {
 
-    private val green: Int = 0
-    private val yellow: Int = 0
-    private val red: Int = 0
+    private val green: Int = 5
+    private val yellow: Int = 2
+    private val red: Int = 1
 
 
     fun totalTime(): Int {
