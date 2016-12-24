@@ -16,8 +16,7 @@ import java.lang.reflect.Constructor;
  * To keep this class uncoupled we shall not add utilties to it, we will derive an class with convenience functions.
  */
 public class GriddedActivity extends Activity {
-  protected GridManager gridManager; //todo: change to protected.
-
+  protected GridManager gridManager;
   public int getIntState(Bundle savedInstanceState, String key, int defaultValue){
     return savedInstanceState.getInt(getClass().getCanonicalName()+"."+key,defaultValue);
   }
@@ -57,13 +56,15 @@ public class GriddedActivity extends Activity {
 
   public <K extends View> K add(Class<K> viewClass, boolean fillWidth) throws IllegalArgumentException {
     try {
-      Constructor<K> ctor = viewClass.getConstructor(Context.class);
-      K viewObject = ctor.newInstance(this);
-
       GridLayout.LayoutParams layout = new GridLayout.LayoutParams();
       if (fillWidth) {
         layout.setGravity(Gravity.FILL_HORIZONTAL);
       }
+      
+      Constructor<K> ctor = viewClass.getConstructor(Context.class);
+      K viewObject = ctor.newInstance(this);
+
+
       gridManager.addView(viewObject, layout);//
       return viewObject;
     } catch (Exception e) {
@@ -73,11 +74,11 @@ public class GriddedActivity extends Activity {
   }
 
   public void ShowObject(Object obj){
-    AcknowledgeActivity.Acknowledge(obj.toString(),gridManager.getContext());
+    AcknowledgeActivity.Companion.Acknowledge(obj.toString(),gridManager.getContext());
   }
 
   public void ShowStackTrace(Throwable wtf){
-    AcknowledgeActivity.Acknowledge(wtf.getMessage(), this);
+    AcknowledgeActivity.Companion.Acknowledge(wtf.getMessage(), this);
   }
 
 }
