@@ -11,16 +11,14 @@ class ViewFormatter(var view: TextView?) {
 
   /** uses MessageFormat.format to produce text that is appended to the view. Tolerates a null view. */
   fun format(mformat: String, vararg args: Any): String {
-    if (args.size == 0) {//expedite frequent case
-      if (view != null) {
-        view!!.append(mformat)
-      }
+    if (args.isEmpty()) {//expedite frequent case
+
+        view?.append(mformat)
+
       return mformat
     }
     val ess = MessageFormat.format(mformat, *args)
-    if (view != null) {
-      view!!.append(ess)
-    }
+    view?.append(ess)
     return ess
   }
 

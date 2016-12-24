@@ -16,24 +16,6 @@ class DroidSampler : EasyActivity() {
   internal var sets: List<TimerSet>? = null
   internal val currentSet: TimerSet = TimerSet()
   internal var tremain: Int = 0
-  internal val viewUpdater=Handler()
-/*
-    Timer myTimer = new Timer();
-      myTimer.schedule(new TimerTask() {
-         @Override
-         public void run() {UpdateGUI();}
-      }, 0, 1000);
-
-   }
-
-   private void UpdateGUI() {
-      i++;
-      //tv.setText(String.valueOf(i));
-      myHandler.post(myRunnable);
-   }
-
-
-* */
 
   private fun updateTimeview() {
     --tremain
