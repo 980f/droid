@@ -10,14 +10,33 @@ import android.widget.TextView
  */
 
 open class EasyActivity : GriddedActivity() {
-  fun makeButton(legend: String, clicker: View.OnClickListener?): Button {
+
+//  fun makeButton(legend: String, clicker: (View)->Unit): Button {
+//    val button = add(Button::class.java)
+//    button.text = legend
+//
+//    button.setOnClickListener(object : View.OnClickListener {
+//      override fun onClick(view:View){
+//        clicker(view)
+//      }
+//    })
+//
+//    return button
+//  }
+
+  fun makeButton(legend: String, clicker: ()->Unit): Button {
     val button = add(Button::class.java)
     button.text = legend
-    if (clicker != null) {
-      button.setOnClickListener(clicker)
-    }
+
+    button.setOnClickListener(object : View.OnClickListener {
+      override fun onClick(view:View){
+        clicker()
+      }
+    })
+
     return button
   }
+
 
   fun makeText(width: Int): ViewFormatter {
     val view = ViewFormatter(add(TextView::class.java, width > 0))

@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>Kotlin Notes</title>
+    <meta content="Andy Heilveil" name="author">
+    <meta content="Notes on use of Kotlin" name="description">
+    <meta content="Kotlin" name="keywords">
+    <meta content="BlueGriffon wysiwyg editor" name="generator">
+  </head>
+  <body>
+    <h1>Kotlin tricks and techniques</h1>
+    <p>My experience so far is that Kotlin's 'null pointer' robustness is anything but. I get NPE's on code that isn't visible to my application, so whose fault is that?<br>
+    </p>
+    <h4>class member as click listener: </h4>
+    Example of object factory:<br>
+    fun &lt;T&gt; initializeClassWithArgs(clazz: Class&lt;out T&gt;, vararg args: Pair&lt;Any, Class&lt;*&gt;&gt;): T {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; val (argList, argTypes) = args.unzip()<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; val constructor = clazz.getConstructor(*argTypes.toTypedArray())<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return constructor.newInstance(*argList.toTypedArray())<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } catch (e: NoSuchMethodException) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw RuntimeException("Can't initialize class ${clazz.name}, no
+    &lt;init&gt;(${argTypes.joinToString()})", e)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+    &nbsp;&nbsp;&nbsp; }
+  </body>
+</html>

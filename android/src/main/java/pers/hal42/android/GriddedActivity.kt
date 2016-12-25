@@ -17,8 +17,8 @@ import java.lang.reflect.Constructor
  */
 open class GriddedActivity : Activity() {
   protected var gridManager: GridManager
-  fun getIntState(savedInstanceState: Bundle, key: String, defaultValue: Int): Int {
-    return savedInstanceState.getInt(javaClass.canonicalName + "." + key, defaultValue)
+  fun getIntState(savedInstanceState: Bundle?, key: String, defaultValue: Int): Int {
+    return savedInstanceState?.getInt(javaClass.canonicalName + "." + key, defaultValue) ?: defaultValue
   }
 
   /**
@@ -26,15 +26,13 @@ open class GriddedActivity : Activity() {
    */
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    gridManager = GridManager(this)
-    var columnCount = 1
-    var rows = 0
-    if (savedInstanceState != null) {
-      columnCount = getIntState(savedInstanceState, "columns", 1)
-      rows = getIntState(savedInstanceState, "rows", 0)
-    }
-    if (columnCount > 0) {//don't feed bad value to android
-      gridManager.columnCount = columnCount
+    gridManager= GridManager(this)
+
+    val columns = getIntState(savedInstanceState, "columns", 1)
+    val rows = getIntState(savedInstanceState, "rows", 0)
+
+    if (columns > 0) {//don't feed bad value to android
+      gridManager.columnCount = columns
     }
     if (rows > 0) {//don't feed bad value to android
       gridManager.rowCount = rows
@@ -42,23 +40,14 @@ open class GriddedActivity : Activity() {
     setContentView(gridManager)//todo: bundle for optional layout param
   }
 
-  @Throws(IllegalArgumentException::class)
   fun <K : View> add(viewClass: Class<K>): K {
-    try {
       val ctor = viewClass.getConstructor(Context::class.java)
       val viewObject = ctor.newInstance(this)
       gridManager.addView(viewObject)
       return viewObject
-    } catch (e: Exception) {
-      e.printStackTrace()
-      throw IllegalArgumentException(this.javaClass.name, e)
-    }
-
   }
 
-  @Throws(IllegalArgumentException::class)
   fun <K : View> add(viewClass: Class<K>, fillWidth: Boolean): K {
-    try {
       val layout = GridLayout.LayoutParams()
       if (fillWidth) {
         layout.setGravity(Gravity.FILL_HORIZONTAL)
@@ -67,14 +56,8 @@ open class GriddedActivity : Activity() {
       val ctor = viewClass.getConstructor(Context::class.java)
       val viewObject = ctor.newInstance(this)
 
-
       gridManager.addView(viewObject, layout)//
       return viewObject
-    } catch (e: Exception) {
-      e.printStackTrace()
-      throw IllegalArgumentException(this.javaClass.name, e)
-    }
-
   }
 
   fun ShowObject(obj: Any) {
@@ -82,7 +65,7 @@ open class GriddedActivity : Activity() {
   }
 
   fun ShowStackTrace(wtf: Throwable) {
-    AcknowledgeActivity.Acknowledge(wtf.message, this)
+    AcknowledgeActivity.Acknowledge(wtf.message?:"Ignored Error:", this)
   }
 
 }

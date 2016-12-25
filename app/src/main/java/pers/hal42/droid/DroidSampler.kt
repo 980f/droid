@@ -23,43 +23,43 @@ class DroidSampler : EasyActivity() {
   }
 
   private fun setColor(color: Int) {
-    myView!!.view.setBackgroundColor(color)
+    myView?.view?.setBackgroundColor(color)
   }
 
   //run every second
   fun startTimer() {
-    countdown?.scheduleAtFixedRate(object : TimerTask() {
+    countdown.scheduleAtFixedRate(object : TimerTask() {
       override fun run() {
         updateTimeview()
       }
     }, 0, 1000)
   }
 
-  private fun testTimer(view:View){
+  private fun testTimer(){
     tremain=50
     startTimer()
   }
 
-  private fun myClick(view: View) {//! the given view is related to the button.
-    myView!!.format("\nYou are oppressing me! ")
+  private fun textGeneratorClick() {//! the given view is related to the button.
+    myView?.format("\nYou are oppressing me! ")
   }
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     gridManager.columnCount = 2
-    makeButton("Press me") { v -> myClick(v) }
+    makeButton("Press me"){textGeneratorClick()}
+      //print("wtf does kotlin want for a click listnener?")} //{ view->myClick(view)}
     makeColorButton("Greenish", Color.GREEN)
     makeColorButton("Redish", Color.RED)
     makeColorButton("Blueish", Color.BLUE)
 
     myView = makeText(2)
-
-    makeButton("Start Timer") {v->startTimer()}
-
+    makeButton("Start Timer"){testTimer()}
   }
 
   private fun makeColorButton(colorname: String, colorcode: Int) {
-    makeButton(colorname) { myView!!.view.setBackgroundColor(colorcode) }
+    makeButton(colorname) { myView?.view?.setBackgroundColor(colorcode) }
   }
 
   /**
