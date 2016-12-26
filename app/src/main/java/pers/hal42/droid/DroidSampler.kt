@@ -4,19 +4,15 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.WindowManager
 import pers.hal42.android.EasyActivity
+import pers.hal42.android.PolitePeriodicTimer
 import pers.hal42.android.ViewFormatter
-import java.util.*
-import kotlin.concurrent.timerTask
 
 
 class DroidSampler : EasyActivity(3) {
   internal var myView: ViewFormatter? = null
-  internal var countdown: Timer = java.util.Timer(false)
-  internal val countTask: TimerTask= object : TimerTask() {
-    override fun run() {
-      updateTimeview()
-    }
-  }
+  internal val timing: PolitePeriodicTimer = PolitePeriodicTimer(1000)//once a second and startup stopped as we aren't init'd
+
+
 //  internal var sets: List<TimerSet>? = null
   internal val currentSet: TimerSet = TimerSet()
   internal var tremain: Int = 0
@@ -27,13 +23,13 @@ class DroidSampler : EasyActivity(3) {
       myView?.cls()
       --tremain
       if(tremain> 0) {
-        myView?.format("Time remaining: {0}", tremain)
+        myView?.format("{0}", tremain)
       } else if(tremain<0){
         if (tremain < -currentSet.totalTime()) {
-          myView?.format("Over by More than: {0}", currentSet.totalTime())
+          myView?.format("Over >{0}!", currentSet.totalTime())
           running=false
         } else {
-          myView?.format("Over Time by: {0}", -tremain)
+          myView?.format("Over {0}!", -tremain)
         }
       } else {
         myView?.format("Time's UP!")
@@ -46,10 +42,10 @@ class DroidSampler : EasyActivity(3) {
     myView?.setBackgroundColor(color)
   }
 
-
   private fun testTimer() {
     tremain = currentSet.totalTime()
     running=true
+    timing.resume()
   }
 
 /***/
@@ -58,6 +54,7 @@ class DroidSampler : EasyActivity(3) {
     makeColorButton("Greenish", Color.GREEN)
     makeColorButton("Yellowish", Color.YELLOW)
     makeColorButton("Redish", Color.RED)
+
     makeButton(-1,"Start Timer") { testTimer() }
 
     myView = makeText(-1)
@@ -67,8 +64,7 @@ class DroidSampler : EasyActivity(3) {
     //we will eventually make this more dynamic
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-    countdown.scheduleAtFixedRate(countTask  , 0, 1000)
-
+    timing.tasklist.add {updateTimeview()}
   }
 
   /** a button that when pressed sets the background of the text area to the given @param colorcode */
@@ -100,6 +96,7 @@ class DroidSampler : EasyActivity(3) {
       }
     }
 
+    //hack for testing
     fun distribute(total: Int, long: Float = 0.6F, medium: Float = 0.3F, short: Float = 0.1F) {
       red = (total * short).toInt()
       green = (total * long).toInt()

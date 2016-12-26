@@ -34,5 +34,8 @@ open class EasyActivity(columns:Int ) : GriddedActivity(columns) {
     return view
   }
 
+//  fun popupNumberEditor(target: Pro) {
+//
+//  }
   //todo: add facility for a click on a text view generating a new activity with a single view which has the same text as the clicked on textview.
 }

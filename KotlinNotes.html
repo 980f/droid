@@ -19,6 +19,33 @@
       object?.member access makes the member access conditional upon the non-nullity of the object.<br>
       object?:other is the object if not null else the other.<br>
     </p>
+    <hr>ChangeListener<br>
+    <br>
+    Delegates.observable implements a single listener. If we implement the equivalent of sigc signals then we should be able to insert one of those in the single
+    listener slot.<br>
+    <br>
+    <ul>
+      <li>import kotlin.properties.Delegates</li>
+      <li>class User {</li>
+      <ul>
+        <li>var name: String by Delegates.observable("&lt;no name&gt;") {</li>
+        <ul>
+          <li>prop, old, new -&gt;</li>
+          <li>println("$old -&gt; $new")</li>
+        </ul>
+        <li>}</li>
+      </ul>
+      <li>}</li>
+      <li>fun main(args: Array&lt;String&gt;) {</li>
+      <ul>
+        <li>val user = User()</li>
+        <li>user.name = "first"</li>
+        <li>user.name = "second"</li>
+      </ul>
+      <li>}</li>
+      <li> <br>
+      </li>
+    </ul>
     <hr>
     <h4><br>
       class member as click listener: </h4>
