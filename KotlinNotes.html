@@ -11,13 +11,24 @@
   <body>
     <h1>Kotlin tricks and techniques</h1>
     <p>My experience so far is that Kotlin's 'null pointer' robustness is anything but. I get NPE's on code that isn't visible to my application, so whose fault is
-      that? Deep inside automatically generated init{}blocks something unspecified was not init by Kotlin internals.<br>
-      <br>
+      that? Deep inside automatically generated init{}blocks something unspecified was not init by Kotlin internals. -&gt; apparently this is specific to some gui
+      classes, and the kotlin automation isn't quite right on its nullity declarations. <br>
+      In fact, it seems to be a debugger problem half the time, it creates a buggered up dex file with a failed partial update then gets bent out of shape.</p>
+    <hr>
+    <p> <br>
       object?.member access makes the member access conditional upon the non-nullity of the object.<br>
       object?:other is the object if not null else the other.<br>
     </p>
-    <h4>class member as click listener: </h4>
-    Example of object factory:<br>
+    <hr>
+    <h4><br>
+      class member as click listener: </h4>
+    <br>
+    <pre style="background-color:#ffffff;color:#000000;font-family:'DejaVu Sans Mono';font-size:9.0pt;"><br><span style="color:#000080;font-weight:bold;">fun </span>makeButton(legend: String, clicker: ()-&gt;Unit): Button {<br>  <span
+style="color:#000080;font-weight:bold;">val </span>button = add(Button::<span style="color:#000080;font-weight:bold;">class</span>.<span style="color:#660e7a;font-style:italic;">java</span><span
+style="color:#000080;font-weight:bold;"></span>) //instantiates a member of the given class<br>  button.<span style="color:#660e7a;font-style:italic;">text </span>= legend<br><br>  button.setOnClickListener(<span
+style="color:#000080;font-weight:bold;">object </span>: View.OnClickListener {<br>    <span style="color:#808080;font-style:italic;">//java under the hood needs an interface so we wrap our functional in one.<br></span><span
+style="color:#808080;font-style:italic;">    </span><span style="color:#000080;font-weight:bold;">override fun </span>onClick(view: View) {<br>      clicker()<br>    }<br>  })<br><br>  <span
+style="color:#000080;font-weight:bold;">return </span>button<br>}</pre><br><br>Example of object factory:<br>
     <pre>fun &lt;T&gt; initializeClassWithArgs(clazz: Class&lt;out T&gt;, vararg args: Pair&lt;Any, Class&lt;*&gt;&gt;): T {
   val (argList, argTypes) = args.unzip()
   try {

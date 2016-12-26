@@ -20,9 +20,10 @@ class DroidSampler : EasyActivity(3) {
 //  internal var sets: List<TimerSet>? = null
   internal val currentSet: TimerSet = TimerSet()
   internal var tremain: Int = 0
+  internal var running:Boolean =false
 
   private fun updateTimeview() {
-    if(tremain!=0) {
+    if(running) {
       myView?.cls()
       --tremain
       if(tremain> 0) {
@@ -30,6 +31,7 @@ class DroidSampler : EasyActivity(3) {
       } else if(tremain<0){
         if (tremain < -currentSet.totalTime()) {
           myView?.format("Over by More than: {0}", currentSet.totalTime())
+          running=false
         } else {
           myView?.format("Over Time by: {0}", -tremain)
         }
@@ -44,28 +46,19 @@ class DroidSampler : EasyActivity(3) {
     myView?.setBackgroundColor(color)
   }
 
-  //run every second
-  fun startTimer() {
-  }
 
   private fun testTimer() {
-    tremain = 30
-    currentSet.distribute(tremain)
-    startTimer()
-  }
-
-  private fun textGeneratorClick() {//! the given view is related to the button.
-    myView?.format("\nYou are oppressing me! ")
+    tremain = currentSet.totalTime()
+    running=true
   }
 
 /***/
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-//works    makeButton("Press me"){textGeneratorClick()}
     makeColorButton("Greenish", Color.GREEN)
+    makeColorButton("Yellowish", Color.YELLOW)
     makeColorButton("Redish", Color.RED)
-    makeColorButton("Blueish", Color.BLUE)
-    makeButton("Start Timer") { testTimer() }
+    makeButton(-1,"Start Timer") { testTimer() }
 
     myView = makeText(-1)
     myView?.printf("Toast Timer")

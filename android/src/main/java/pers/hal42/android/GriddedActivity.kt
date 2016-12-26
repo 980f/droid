@@ -3,6 +3,8 @@ package pers.hal42.android
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 
 /**
  * Copyright (C) by andyh created on 10/23/12 at 4:14 PM
@@ -36,16 +38,16 @@ open class GriddedActivity(var columns: Int, var rows: Int = 0) : Activity() {
     setContentView(gridManager)//todo: bundle for optional layout param
   }
 
-  fun <K : View> add(viewClass: Class<K>): K {
-    return gridManager!!.add(viewClass)
-  }
-
   fun <K : View> add(viewClass: Class<K>, span: Int = 1, fillWidth: Boolean = true): K {
     return gridManager!!.add(viewClass, span, fillWidth)
   }
 
+  fun <K : View> add(viewClass: Class<K>): K {
+    return gridManager!!.add(viewClass)
+  }
+
+
   fun ShowObject(obj: Any) {
-//    if(gridManager!=null)
     AcknowledgeActivity.Acknowledge(obj.toString(), gridManager!!.context)
   }
 
