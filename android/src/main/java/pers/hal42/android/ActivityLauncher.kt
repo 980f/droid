@@ -8,7 +8,7 @@ import android.widget.Button
  * Copyright (C) by andyh created on 10/17/12 at 6:18 PM
  */
 
-class ActivityLauncher (val ctx: Context, val activity: Class<*>,legend: CharSequence): Button(ctx) {
+class ActivityLauncher (legend: CharSequence,val ctx: Context, val activity: Class<*>): Button(ctx) {
   init {
     setText(legend)
     setOnClickListener { launch() }

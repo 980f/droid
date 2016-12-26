@@ -10,7 +10,7 @@ import java.util.*
 import kotlin.concurrent.timer
 
 
-class DroidSampler : EasyActivity() {
+class DroidSampler : EasyActivity(2) {
   internal var myView: ViewFormatter? = null
   internal var countdown: Timer = java.util.Timer(false)
   internal var sets: List<TimerSet>? = null
@@ -47,9 +47,8 @@ class DroidSampler : EasyActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    gridManager.columnCount = 2
+//    gridManager.columnCount = 2
     makeButton("Press me"){textGeneratorClick()}
-      //print("wtf does kotlin want for a click listnener?")} //{ view->myClick(view)}
     makeColorButton("Greenish", Color.GREEN)
     makeColorButton("Redish", Color.RED)
     makeColorButton("Blueish", Color.BLUE)

@@ -15,8 +15,9 @@ import java.lang.reflect.Constructor
  * The number of rows and columns are read from the savedInstanceState bundle indexed by the derived class name, i.e you should extend from GriddActivity rather than just add widgets to a directly instantiated one.
  * To keep this class uncoupled we shall not add utilties to it, we will derive an class with convenience functions.
  */
-open class GriddedActivity : Activity() {
-  protected var gridManager: GridManager
+open class GriddedActivity(var columns:Int, var rows:Int =0) : Activity() {
+  protected var gridManager: GridManager?=null
+
   fun getIntState(savedInstanceState: Bundle?, key: String, defaultValue: Int): Int {
     return savedInstanceState?.getInt(javaClass.canonicalName + "." + key, defaultValue) ?: defaultValue
   }
@@ -28,14 +29,14 @@ open class GriddedActivity : Activity() {
     super.onCreate(savedInstanceState)
     gridManager= GridManager(this)
 
-    val columns = getIntState(savedInstanceState, "columns", 1)
-    val rows = getIntState(savedInstanceState, "rows", 0)
+    columns = getIntState(savedInstanceState, "columns", columns)
+    rows = getIntState(savedInstanceState, "rows", rows)
 
     if (columns > 0) {//don't feed bad value to android
-      gridManager.columnCount = columns
+      gridManager?.columnCount = columns
     }
     if (rows > 0) {//don't feed bad value to android
-      gridManager.rowCount = rows
+      gridManager?.rowCount = rows
     }
     setContentView(gridManager)//todo: bundle for optional layout param
   }
@@ -43,7 +44,7 @@ open class GriddedActivity : Activity() {
   fun <K : View> add(viewClass: Class<K>): K {
       val ctor = viewClass.getConstructor(Context::class.java)
       val viewObject = ctor.newInstance(this)
-      gridManager.addView(viewObject)
+      gridManager?.addView(viewObject)
       return viewObject
   }
 
@@ -56,12 +57,14 @@ open class GriddedActivity : Activity() {
       val ctor = viewClass.getConstructor(Context::class.java)
       val viewObject = ctor.newInstance(this)
 
-      gridManager.addView(viewObject, layout)//
+      gridManager?.addView(viewObject, layout)//
       return viewObject
   }
 
   fun ShowObject(obj: Any) {
-    AcknowledgeActivity.Acknowledge(obj.toString(), gridManager.context)
+    if(gridManager!=null) {
+      AcknowledgeActivity.Acknowledge(obj.toString(), gridManager!!.context)
+    }
   }
 
   fun ShowStackTrace(wtf: Throwable) {

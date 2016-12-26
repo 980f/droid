@@ -69,37 +69,24 @@ class GridManager(context: Context) : GridLayout(context) {
    * for view items already created this adds it to this grid.
    * @returns the viewObject passed in.
    */
-  @Throws(IllegalArgumentException::class)
   fun <K : View> add(viewObject: K, span: Int, fillWidth: Boolean): K {
-    try {
       val layout = cursor.next(span)
       if (fillWidth) {
         layout.setGravity(Gravity.FILL_HORIZONTAL)
       }
       super.addView(viewObject, layout)//
       return viewObject
-    } catch (e: Exception) {
-      e.printStackTrace()
-      throw IllegalArgumentException(this.javaClass.name, e)
-    }
   }
   /**
    * for view items with a context constructor you can use this method to create one and add it to this grid.
    * @returns the new instance
    */
-  @Throws(IllegalArgumentException::class)
   fun <K : View> add(viewClass: Class<K>, span: Int, fillWidth: Boolean): K {
-    try {
       val ctor = viewClass.getConstructor(Context::class.java)
       val viewObject = ctor.newInstance(context)
       return add(viewObject,span,fillWidth)
-    } catch (e: Exception) {
-      e.printStackTrace()
-      throw IllegalArgumentException(this.javaClass.name, e)
-    }
   }
 
-//  @Throws(IllegalArgumentException::class)
   fun <K : View> add(viewClass: Class<K>): K {
     return add(viewClass, 1, false)
   }
@@ -108,7 +95,6 @@ class GridManager(context: Context) : GridLayout(context) {
     return add(viewClass, span, false)
   }
 
-//  @Throws(IllegalArgumentException::class)
   fun <K : View> add(viewClass: Class<K>, fillWidth: Boolean): K {
     return add(viewClass, 1, fillWidth)
   }
@@ -153,7 +139,7 @@ class GridManager(context: Context) : GridLayout(context) {
   }
 
   fun addLauncher(legend: CharSequence, cls: Class<out Activity>): ActivityLauncher {
-    val button = ActivityLauncher(context,cls,legend)
+    val button = ActivityLauncher(legend,context,cls)
     return add(button,1,false)
   }
 

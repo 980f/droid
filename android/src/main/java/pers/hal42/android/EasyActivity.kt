@@ -9,7 +9,7 @@ import android.widget.TextView
  * add common components to grid.
  */
 
-open class EasyActivity : GriddedActivity() {
+open class EasyActivity(columns:Int ) : GriddedActivity(columns) {
 
 //  fun makeButton(legend: String, clicker: (View)->Unit): Button {
 //    val button = add(Button::class.java)
