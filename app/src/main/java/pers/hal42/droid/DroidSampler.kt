@@ -19,6 +19,7 @@ class DroidSampler : EasyActivity(2) {
 
   private fun updateTimeview() {
     --tremain
+    myView?.format("\nTime remaining:{0}",tremain)
     setColor(currentSet.colorForTimeRemaining(tremain))
   }
 
@@ -37,6 +38,10 @@ class DroidSampler : EasyActivity(2) {
 
   private fun testTimer(){
     tremain=50
+    currentSet.red=(tremain*.1).toInt()
+    currentSet.green=(tremain*.6).toInt()
+    currentSet.yellow=(tremain*.3).toInt()
+    
     startTimer()
   }
 
@@ -57,19 +62,14 @@ class DroidSampler : EasyActivity(2) {
   }
 
   private fun makeColorButton(colorname: String, colorcode: Int) {
-    makeButton(colorname) { myView?.view?.setBackgroundColor(colorcode) }
+    makeButton(colorname) { myView?.setBackgroundColor(colorcode) }
   }
 
   /**
    * a triplet of parameters, how long each of the three phases lasts.
    * e.g. 5 minutes green, 2 minutes yellow, 30 seconds red. Total time 7.5 minutes.
    */
-  class TimerSet {
-
-    private val green: Int = 5
-    private val yellow: Int = 2
-    private val red: Int = 1
-
+  class TimerSet(var green: Int = 5,var yellow: Int = 2,var red: Int = 1){
 
     fun totalTime(): Int {
       return green + yellow + red
@@ -77,7 +77,7 @@ class DroidSampler : EasyActivity(2) {
 
     fun colorForTimeRemaining(tremain: Int): Int {
       if (tremain < 0) {
-        return Color.BLACK
+        return Color.LTGRAY
       } else if (tremain < red) {
         return Color.RED
       } else if (tremain < yellow + red) {
@@ -85,7 +85,7 @@ class DroidSampler : EasyActivity(2) {
       } else if (tremain < green + yellow + red) {
         return Color.GREEN
       } else {
-        return Color.BLUE
+        return Color.MAGENTA
       }
     }
 
