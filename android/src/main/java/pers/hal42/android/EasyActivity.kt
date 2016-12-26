@@ -11,19 +11,6 @@ import android.widget.TextView
 
 open class EasyActivity(columns:Int ) : GriddedActivity(columns) {
 
-//  fun makeButton(legend: String, clicker: (View)->Unit): Button {
-//    val button = add(Button::class.java)
-//    button.text = legend
-//
-//    button.setOnClickListener(object : View.OnClickListener {
-//      override fun onClick(view:View){
-//        clicker(view)
-//      }
-//    })
-//
-//    return button
-//  }
-
   fun makeButton(legend: String, clicker: ()->Unit): Button {
     val button = add(Button::class.java)
     button.text = legend

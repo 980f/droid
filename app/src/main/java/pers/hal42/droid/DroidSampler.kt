@@ -23,7 +23,7 @@ class DroidSampler : EasyActivity(2) {
   }
 
   private fun setColor(color: Int) {
-    myView?.view?.setBackgroundColor(color)
+    myView?.setBackgroundColor(color)
   }
 
   //run every second
@@ -47,7 +47,6 @@ class DroidSampler : EasyActivity(2) {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-//    gridManager.columnCount = 2
     makeButton("Press me"){textGeneratorClick()}
     makeColorButton("Greenish", Color.GREEN)
     makeColorButton("Redish", Color.RED)

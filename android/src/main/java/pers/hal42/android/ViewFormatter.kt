@@ -1,5 +1,6 @@
 package pers.hal42.android
 
+import android.graphics.Color
 import android.os.Handler
 import android.widget.TextView
 
@@ -14,6 +15,11 @@ class ViewFormatter(var view: TextView?) {
 
   fun post(ess:String){
     handler.post { view?.append(ess) }
+  }
+
+
+  fun setBackgroundColor(color: Int){
+    handler.post { view?.setBackgroundColor(color) }
   }
 
   /** uses MessageFormat.format to produce text that is appended to the view. Tolerates a null view. */
