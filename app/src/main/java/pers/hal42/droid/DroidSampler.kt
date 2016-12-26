@@ -2,25 +2,42 @@ package pers.hal42.droid
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.view.View
+import android.view.WindowManager
 import pers.hal42.android.EasyActivity
 import pers.hal42.android.ViewFormatter
 import java.util.*
-import kotlin.concurrent.timer
+import kotlin.concurrent.timerTask
 
 
-class DroidSampler : EasyActivity(2) {
+class DroidSampler : EasyActivity(3) {
   internal var myView: ViewFormatter? = null
   internal var countdown: Timer = java.util.Timer(false)
-  internal var sets: List<TimerSet>? = null
+  internal val countTask: TimerTask= object : TimerTask() {
+    override fun run() {
+      updateTimeview()
+    }
+  }
+//  internal var sets: List<TimerSet>? = null
   internal val currentSet: TimerSet = TimerSet()
   internal var tremain: Int = 0
 
   private fun updateTimeview() {
-    --tremain
-    myView?.format("\nTime remaining:{0}",tremain)
-    setColor(currentSet.colorForTimeRemaining(tremain))
+    if(tremain!=0) {
+      myView?.cls()
+      --tremain
+      if(tremain> 0) {
+        myView?.format("Time remaining: {0}", tremain)
+      } else if(tremain<0){
+        if (tremain < -currentSet.totalTime()) {
+          myView?.format("Over by More than: {0}", currentSet.totalTime())
+        } else {
+          myView?.format("Over Time by: {0}", -tremain)
+        }
+      } else {
+        myView?.format("Time's UP!")
+      }
+      setColor(currentSet.colorForTimeRemaining(tremain))
+    }
   }
 
   private fun setColor(color: Int) {
@@ -29,19 +46,11 @@ class DroidSampler : EasyActivity(2) {
 
   //run every second
   fun startTimer() {
-    countdown.scheduleAtFixedRate(object : TimerTask() {
-      override fun run() {
-        updateTimeview()
-      }
-    }, 0, 1000)
   }
 
-  private fun testTimer(){
-    tremain=50
-    currentSet.red=(tremain*.1).toInt()
-    currentSet.green=(tremain*.6).toInt()
-    currentSet.yellow=(tremain*.3).toInt()
-    
+  private fun testTimer() {
+    tremain = 30
+    currentSet.distribute(tremain)
     startTimer()
   }
 
@@ -49,18 +58,27 @@ class DroidSampler : EasyActivity(2) {
     myView?.format("\nYou are oppressing me! ")
   }
 
-
+/***/
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    makeButton("Press me"){textGeneratorClick()}
+//works    makeButton("Press me"){textGeneratorClick()}
     makeColorButton("Greenish", Color.GREEN)
     makeColorButton("Redish", Color.RED)
     makeColorButton("Blueish", Color.BLUE)
+    makeButton("Start Timer") { testTimer() }
 
-    myView = makeText(2)
-    makeButton("Start Timer"){testTimer()}
+    myView = makeText(-1)
+    myView?.printf("Toast Timer")
+
+    myView?.view?.keepScreenOn  //this did not do anything discernable
+    //we will eventually make this more dynamic
+    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+    countdown.scheduleAtFixedRate(countTask  , 0, 1000)
+
   }
 
+  /** a button that when pressed sets the background of the text area to the given @param colorcode */
   private fun makeColorButton(colorname: String, colorcode: Int) {
     makeButton(colorname) { myView?.setBackgroundColor(colorcode) }
   }
@@ -69,7 +87,7 @@ class DroidSampler : EasyActivity(2) {
    * a triplet of parameters, how long each of the three phases lasts.
    * e.g. 5 minutes green, 2 minutes yellow, 30 seconds red. Total time 7.5 minutes.
    */
-  class TimerSet(var green: Int = 5,var yellow: Int = 2,var red: Int = 1){
+  class TimerSet(var green: Int = 5, var yellow: Int = 2, var red: Int = 1) {
 
     fun totalTime(): Int {
       return green + yellow + red
@@ -87,6 +105,12 @@ class DroidSampler : EasyActivity(2) {
       } else {
         return Color.MAGENTA
       }
+    }
+
+    fun distribute(total: Int, long: Float = 0.6F, medium: Float = 0.3F, short: Float = 0.1F) {
+      red = (total * short).toInt()
+      green = (total * long).toInt()
+      yellow = (total * medium).toInt()
     }
 
   }

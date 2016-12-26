@@ -11,8 +11,6 @@ import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
 
-import java.lang.reflect.Constructor
-
 /**
  * Copyright andyh  10/17/12 3:55 PM
  * todo: "clear screen" and reset cursor.
@@ -24,31 +22,32 @@ class GridManager(context: Context) : GridLayout(context) {
    * While public there is typically only one instance per GridManager and that instance is part of the GridManager object.
    * As a consequence of making row and col members public their values are checked and constrained before each use herein.
    */
-   class Cursor(val grid: GridLayout, var col: Int = 0, var row: Int = 0){
+  class Cursor(val grid: GridLayout, var col: Int = 0, var row: Int = 0) {
 
     fun clear() {
-      row=0
-      col=0
+      row = 0
+      col = 0
     }
+
     /**
      * @param span number of desired cells.
      * *
      * @return layout for given span, except if <0 or would exceed end of line then remaining on line
      */
-//    @JvmOverloads
+    //    @JvmOverloads
     fun next(span: Int = 1): GridLayout.LayoutParams {
       val columnCount = grid.columnCount
       if (col >= columnCount) { //wrap line
         col = 0
         ++row
       }
-      val spanish= //constrained value of given span
-      if (span < 0 || //hack for when it is inconvenient to call eol() due to default args.
-        span > columnCount - col) { //do not wrap middle of entity nor auto expand grid.
-        columnCount - col//and if that is negative let it blow for now
-      } else {
-        span
-      }
+      val spanish = //constrained value of given span
+        if (span < 0 || //hack for when it is inconvenient to call eol() due to default args.
+          span > columnCount - col) { //do not wrap middle of entity nor auto expand grid.
+          columnCount - col//and if that is negative let it blow for now
+        } else {
+          span
+        }
       val layout = GridLayout.LayoutParams(GridLayout.spec(row), GridLayout.spec(col, spanish))
       col += spanish
       return layout
@@ -70,21 +69,22 @@ class GridManager(context: Context) : GridLayout(context) {
    * @returns the viewObject passed in.
    */
   fun <K : View> add(viewObject: K, span: Int, fillWidth: Boolean): K {
-      val layout = cursor.next(span)
-      if (fillWidth) {
-        layout.setGravity(Gravity.FILL_HORIZONTAL)
-      }
-      super.addView(viewObject, layout)//
-      return viewObject
+    val layout = cursor.next(span)
+    if (fillWidth) {
+      layout.setGravity(Gravity.FILL_HORIZONTAL)
+    }
+    super.addView(viewObject, layout)//
+    return viewObject
   }
+
   /**
    * for view items with a context constructor you can use this method to create one and add it to this grid.
    * @returns the new instance
    */
   fun <K : View> add(viewClass: Class<K>, span: Int, fillWidth: Boolean): K {
-      val ctor = viewClass.getConstructor(Context::class.java)
-      val viewObject = ctor.newInstance(context)
-      return add(viewObject,span,fillWidth)
+    val ctor = viewClass.getConstructor(Context::class.java)
+    val viewObject = ctor.newInstance(context)
+    return add(viewObject, span, fillWidth)
   }
 
   fun <K : View> add(viewClass: Class<K>): K {
@@ -115,7 +115,7 @@ class GridManager(context: Context) : GridLayout(context) {
 
   fun addNumberEntry(initialValue: Float, span: Int = -1): EditText {
     val editor = add(EditText::class.java, span)
-    editor.inputType=TYPE_CLASS_NUMBER
+    editor.inputType = TYPE_CLASS_NUMBER
     editor.setText(initialValue.toString())
     return editor
   }
@@ -139,8 +139,8 @@ class GridManager(context: Context) : GridLayout(context) {
   }
 
   fun addLauncher(legend: CharSequence, cls: Class<out Activity>): ActivityLauncher {
-    val button = ActivityLauncher(legend,context,cls)
-    return add(button,1,false)
+    val button = ActivityLauncher(legend, context, cls)
+    return add(button, 1, false)
   }
 
   fun addSlider(span: Int = -1): LinearSlider {

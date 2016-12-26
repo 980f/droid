@@ -1,13 +1,8 @@
 package pers.hal42.android
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import android.widget.GridLayout
-
-import java.lang.reflect.Constructor
 
 /**
  * Copyright (C) by andyh created on 10/23/12 at 4:14 PM
@@ -15,8 +10,8 @@ import java.lang.reflect.Constructor
  * The number of rows and columns are read from the savedInstanceState bundle indexed by the derived class name, i.e you should extend from GriddActivity rather than just add widgets to a directly instantiated one.
  * To keep this class uncoupled we shall not add utilties to it, we will derive an class with convenience functions.
  */
-open class GriddedActivity(var columns:Int, var rows:Int =0) : Activity() {
-  protected var gridManager: GridManager?=null
+open class GriddedActivity(var columns: Int, var rows: Int = 0) : Activity() {
+  protected var gridManager: GridManager? = null //NPE if we try to instantiate this before onCreate is called: GridManager(this)
 
   fun getIntState(savedInstanceState: Bundle?, key: String, defaultValue: Int): Int {
     return savedInstanceState?.getInt(javaClass.canonicalName + "." + key, defaultValue) ?: defaultValue
@@ -42,33 +37,20 @@ open class GriddedActivity(var columns:Int, var rows:Int =0) : Activity() {
   }
 
   fun <K : View> add(viewClass: Class<K>): K {
-      val ctor = viewClass.getConstructor(Context::class.java)
-      val viewObject = ctor.newInstance(this)
-      gridManager?.addView(viewObject)
-      return viewObject
+    return gridManager!!.add(viewClass)
   }
 
-  fun <K : View> add(viewClass: Class<K>, fillWidth: Boolean): K {
-      val layout = GridLayout.LayoutParams()
-      if (fillWidth) {
-        layout.setGravity(Gravity.FILL_HORIZONTAL)
-      }
-
-      val ctor = viewClass.getConstructor(Context::class.java)
-      val viewObject = ctor.newInstance(this)
-
-      gridManager?.addView(viewObject, layout)//
-      return viewObject
+  fun <K : View> add(viewClass: Class<K>, span: Int = 1, fillWidth: Boolean = true): K {
+    return gridManager!!.add(viewClass, span, fillWidth)
   }
 
   fun ShowObject(obj: Any) {
-    if(gridManager!=null) {
-      AcknowledgeActivity.Acknowledge(obj.toString(), gridManager!!.context)
-    }
+//    if(gridManager!=null)
+    AcknowledgeActivity.Acknowledge(obj.toString(), gridManager!!.context)
   }
 
   fun ShowStackTrace(wtf: Throwable) {
-    AcknowledgeActivity.Acknowledge(wtf.message?:"Ignored Error:", this)
+    AcknowledgeActivity.Acknowledge(wtf.message ?: "Ignored Error:", this)
   }
 
 }
