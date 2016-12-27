@@ -2,6 +2,7 @@ package pers.hal42.android
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.widget.EditText
 
 
@@ -50,16 +51,15 @@ class NumberEditor() : EasyActivity(1) {
 
   }
 
-
-
-
   var editor: EditText? = null
 
   fun onEditorAction(actionId: Int) {
-    print("Editor action id: "); print(actionId)
-    val result = editor?.text.toString()
-    setResult(RESULT_OK, Connection.response.entry(result))
-    finish()
+    if(actionId==IME_ACTION_DONE) {
+      val text = editor?.text
+      val result = text?.toString() //this is giving bogus response, clipping and eliding what is in the editor (which is also wrong)
+      setResult(RESULT_OK, Connection.response.entry(result))
+      finish()
+    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +73,7 @@ class NumberEditor() : EasyActivity(1) {
       onEditorAction(p1)
       true
     }
-    editor.
+    editor!!.showSoftInputOnFocus=true  //despite upping sdk leve this does not do what it suggests it does.
+//    editor.
   }
 }

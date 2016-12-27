@@ -6,7 +6,7 @@ android {
     buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "pers.hal42.droid"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
