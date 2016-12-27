@@ -1,40 +1,67 @@
 package pers.hal42.android
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
 import android.widget.EditText
-import android.widget.TextView
-import kotlin.reflect.KMutableProperty
 
+class EditorConnection(val legend: String, val desc: String, val getter: () -> Int, val setter: (Int) -> Unit) {
 
+  companion object response {
+    const val resultKey = "result"
+    const val descKey = "desc"
+    const val legendKey = "legend"
+    const val startingKey = "starting"
 
-/** edit the given property */
-class NumberEditor(val target: KMutableProperty<Int>, val desc:String) : EasyActivity(1) {
-  val starting:Int by lazy { target.getter.call() }
-  val editor: EditText by lazy {gridManager.addNumberEntry(starting.toFloat())}
-
-  fun onEnter(){
-    val newvalue= editor.text.toString().toInt()
-    target.setter.call(newvalue)
+    fun entry(value: Int): Intent {
+      val intent = Intent("garbage")
+      intent.putExtra(resultKey, value)
+      return intent
+    }
   }
 
-  fun onEditorAction(actionId: Int  ){
+  /** the container will map activity results to this EditorConnection via this code*/
+  fun uniqueID() = this.hashCode()
+
+  fun sendParams(intent: Intent) {
+    intent.putExtra(descKey, desc)
+    intent.putExtra(legendKey, legend)
+    intent.putExtra(startingKey, getter())
+  }
+
+  /** get entry, if defective feed original value back. */
+  fun accept(data: Intent?) {
+    val result = data?.getIntExtra(resultKey, getter()) ?: getter()
+    setter(result)
+  }
+
+}
+
+/** edit the given property */
+class NumberEditor() : EasyActivity(1) {
+  val editor: EditText? = null
+
+  fun onEditorAction(actionId: Int) {
     print("Editor action id: "); print(actionId)
-    onEnter()
+    val result =
+      try {
+        editor?.text.toString().toInt()
+      } catch (ex: NumberFormatException) {
+        -42
+      }
+    setResult(RESULT_OK, EditorConnection.response.entry(result))
+    finish()
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    //setContentView(R.layout.activity_number_editor)
-    val starting =target.getter.call()
-    makeText(-1).format(desc,starting)
-//    editor=gridManager.addNumberEntry(starting.toFloat())
+    val starting = intent.getFloatExtra("starting", 0.0F)
+    val desc = intent.getStringExtra("desc")//,"Unknown item")
+    makeText(-1).format(desc, starting)
+    val editor = gridManager.addNumberEntry(starting)
     editor.selectAll()
-    editor.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-      override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        onEditorAction(p1)
-        return true
-      }
-    })
+    editor.setOnEditorActionListener { p0, p1, p2 ->
+      onEditorAction(p1)
+      true
+    }
   }
 }

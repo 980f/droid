@@ -1,8 +1,11 @@
 package pers.hal42.android
 
+import android.content.Intent
+import android.support.v4.app.ActivityCompat
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import java.util.*
 
 /**
  * Created by andyh on 12/9/16.
@@ -33,9 +36,29 @@ open class EasyActivity(columns:Int ) : GriddedActivity(columns) {
     val view = ViewFormatter(add(TextView::class.java, width ))
     return view
   }
+////////////////
+  val popups: MutableMap<Int,EditorConnection> = HashMap()
 
-//  fun popupNumberEditor(target: Pro) {
-//
-//  }
+  fun launch(connection: EditorConnection){
+      val intent= Intent( applicationContext,  NumberEditor::class.java)
+      connection.sendParams(intent)
+      popups[connection.uniqueID()]=connection
+      startActivityForResult(intent,connection.uniqueID())
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    val connection=popups[requestCode]
+    connection?.accept(data)
+    popups.remove(requestCode)
+  }
+
+  /** create and add button that when clicked launches an editor */
+  fun makeLauncher(connection: EditorConnection): Button {
+    val button = makeButton(connection.legend){
+      launch(connection)
+    }
+    return button
+  }
   //todo: add facility for a click on a text view generating a new activity with a single view which has the same text as the clicked on textview.
 }

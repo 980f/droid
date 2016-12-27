@@ -52,8 +52,8 @@ class DroidSampler : EasyActivity(3) {
     super.onCreate(savedInstanceState)
     makeColorButton("Greenish", Color.GREEN)
     makeColorButton("Yellowish", Color.YELLOW)
-    makeColorButton("Redish", Color.RED)
-
+//    makeColorButton("Redish", Color.RED)
+    makeLauncher(EditorConnection("Redish","set red time",{currentSet.red},{value->currentSet.red=value}))
     makeButton(-1,"Start Timer") { testTimer() }
 
 //    myView =
