@@ -37,9 +37,9 @@ open class EasyActivity(columns:Int ) : GriddedActivity(columns) {
     return view
   }
 ////////////////
-  val popups: MutableMap<Int,EditorConnection> = HashMap()
+  val popups: MutableMap<Int,NumberEditor.Connection> = HashMap()
 
-  fun launch(connection: EditorConnection){
+  fun launch(connection: NumberEditor.Connection){
       val intent= Intent( applicationContext,  NumberEditor::class.java)
       connection.sendParams(intent)
       popups[connection.uniqueID()]=connection
@@ -54,7 +54,7 @@ open class EasyActivity(columns:Int ) : GriddedActivity(columns) {
   }
 
   /** create and add button that when clicked launches an editor */
-  fun makeLauncher(connection: EditorConnection): Button {
+  fun makeLauncher(connection: NumberEditor.Connection): Button {
     val button = makeButton(connection.legend){
       launch(connection)
     }

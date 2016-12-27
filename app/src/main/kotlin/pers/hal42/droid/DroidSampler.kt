@@ -53,20 +53,14 @@ class DroidSampler : EasyActivity(3) {
     makeColorButton("Greenish", Color.GREEN)
     makeColorButton("Yellowish", Color.YELLOW)
 //    makeColorButton("Redish", Color.RED)
-    makeLauncher(EditorConnection("Redish","set red time",{currentSet.red.toFloat()},{value->currentSet.red=value.toInt()}))
+    makeLauncher(NumberEditor.Connection("Redish","set red time",{currentSet.red.toFloat()},{value->currentSet.red=value.toInt()}))
     makeButton(-1,"Start Timer") { testTimer() }
 
-//    myView =
     myView.printf("Toast Timer")  //this reference to myView creates it so must occur in an appropriate place to set its screen position.
 
-//    myView?.view?.keepScreenOn  //this did not do anything discernable
     //we will eventually make this more dynamic
-    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
-//  val redder=NumberEditor(currentSet.red,"red time in seconds")
-//  val redLaunch=ActivityLauncher("change red",myView?.context,)
-//  this.gridManager.add(redder,-1,true)
-
+//    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    myView.view.keepScreenOn=true
 
     timing.tasklist.add {updateTimeview()}
   }
