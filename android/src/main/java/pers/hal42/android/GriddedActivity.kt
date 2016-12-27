@@ -13,7 +13,7 @@ import android.widget.TextView
  * To keep this class uncoupled we shall not add utilties to it, we will derive an class with convenience functions.
  */
 open class GriddedActivity(var columns: Int, var rows: Int = 0) : Activity() {
-  protected var gridManager: GridManager? = null //NPE if we try to instantiate this before onCreate is called: GridManager(this)
+  protected val gridManager: GridManager by lazy { GridManager(this) } //NPE if we try to instantiate this before onCreate is called: GridManager(this)
 
   fun getIntState(savedInstanceState: Bundle?, key: String, defaultValue: Int): Int {
     return savedInstanceState?.getInt(javaClass.canonicalName + "." + key, defaultValue) ?: defaultValue
@@ -24,31 +24,30 @@ open class GriddedActivity(var columns: Int, var rows: Int = 0) : Activity() {
    */
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    gridManager= GridManager(this)
 
     columns = getIntState(savedInstanceState, "columns", columns)
     rows = getIntState(savedInstanceState, "rows", rows)
 
     if (columns > 0) {//don't feed bad value to android
-      gridManager?.columnCount = columns
+      gridManager.columnCount = columns
     }
     if (rows > 0) {//don't feed bad value to android
-      gridManager?.rowCount = rows
+      gridManager.rowCount = rows
     }
     setContentView(gridManager)//todo: bundle for optional layout param
   }
 
   fun <K : View> add(viewClass: Class<K>, span: Int = 1, fillWidth: Boolean = true): K {
-    return gridManager!!.add(viewClass, span, fillWidth)
+    return gridManager.add(viewClass, span, fillWidth)
   }
 
   fun <K : View> add(viewClass: Class<K>): K {
-    return gridManager!!.add(viewClass)
+    return gridManager.add(viewClass)
   }
 
 
   fun ShowObject(obj: Any) {
-    AcknowledgeActivity.Acknowledge(obj.toString(), gridManager!!.context)
+    AcknowledgeActivity.Acknowledge(obj.toString(), gridManager.context)
   }
 
   fun ShowStackTrace(wtf: Throwable) {

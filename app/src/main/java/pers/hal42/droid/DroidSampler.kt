@@ -3,13 +3,12 @@ package pers.hal42.droid
 import android.graphics.Color
 import android.os.Bundle
 import android.view.WindowManager
-import pers.hal42.android.EasyActivity
-import pers.hal42.android.PolitePeriodicTimer
-import pers.hal42.android.ViewFormatter
+import pers.hal42.android.*
+import kotlin.reflect.KMutableProperty
 
 
 class DroidSampler : EasyActivity(3) {
-  internal var myView: ViewFormatter? = null
+  internal val myView: ViewFormatter by lazy { makeText(-1) }
   internal val timing: PolitePeriodicTimer = PolitePeriodicTimer(1000)//once a second and startup stopped as we aren't init'd
 
 
@@ -20,26 +19,26 @@ class DroidSampler : EasyActivity(3) {
 
   private fun updateTimeview() {
     if(running) {
-      myView?.cls()
+      myView.cls()
       --tremain
       if(tremain> 0) {
-        myView?.format("{0}", tremain)
+        myView.format("{0}", tremain)
       } else if(tremain<0){
         if (tremain < -currentSet.totalTime()) {
-          myView?.format("Over >{0}!", currentSet.totalTime())
+          myView.format("Over >{0}!", currentSet.totalTime())
           running=false
         } else {
-          myView?.format("Over {0}!", -tremain)
+          myView.format("Over {0}!", -tremain)
         }
       } else {
-        myView?.format("Time's UP!")
+        myView.format("Time's UP!")
       }
       setColor(currentSet.colorForTimeRemaining(tremain))
     }
   }
 
   private fun setColor(color: Int) {
-    myView?.setBackgroundColor(color)
+    myView.setBackgroundColor(color)
   }
 
   private fun testTimer() {
@@ -57,19 +56,24 @@ class DroidSampler : EasyActivity(3) {
 
     makeButton(-1,"Start Timer") { testTimer() }
 
-    myView = makeText(-1)
-    myView?.printf("Toast Timer")
+//    myView =
+    myView.printf("Toast Timer")  //this reference to myView creates it so must occur in an appropriate place to set its screen position.
 
-    myView?.view?.keepScreenOn  //this did not do anything discernable
+//    myView?.view?.keepScreenOn  //this did not do anything discernable
     //we will eventually make this more dynamic
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+//  val redder=NumberEditor(currentSet.red,"red time in seconds")
+//  val redLaunch=ActivityLauncher("change red",myView?.context,)
+//  this.gridManager.add(redder,-1,true)
+
 
     timing.tasklist.add {updateTimeview()}
   }
 
   /** a button that when pressed sets the background of the text area to the given @param colorcode */
   private fun makeColorButton(colorname: String, colorcode: Int) {
-    makeButton(colorname) { myView?.setBackgroundColor(colorcode) }
+    makeButton(colorname) { myView.setBackgroundColor(colorcode) }
   }
 
   /**
