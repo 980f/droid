@@ -1,21 +1,19 @@
 package pers.hal42.android
 
-import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.text.InputType.*
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.GridLayout
-import android.widget.TextView
 
 /**
  * Copyright andyh  10/17/12 3:55 PM
  * todo: "clear screen" and reset cursor.
  */
 class GridManager(context: Context) : GridLayout(context) {
+  var fixBug = true
 
   /**
    * grid position generator.
@@ -99,36 +97,23 @@ class GridManager(context: Context) : GridLayout(context) {
     return add(viewClass, 1, fillWidth)
   }
 
-  fun addDisplay(fixedText: CharSequence, span: Int = -1): TextView {
-    val child = add(TextView::class.java, span, true) //true: text boxes should fill their space so that they don't change shape as much
-    child.setBackgroundColor(Color.WHITE) //alh: should figure out how to do style sheet like stuff. til then hardcode personal prefs.
-    child.setTextColor(Color.BLACK)
-    child.text = fixedText
-    return child
-  }
-
-  fun addTextEntry(prompt: CharSequence): EditText {
-    val editor = add(EditText::class.java)
-    editor.setText(prompt)
-    return editor
-  }
 
   fun addNumberEntry(initialValue: Float, asInteger: Boolean = true, hasSign: Boolean = false, span: Int = -1): EditText {
     val editor = add(EditText::class.java, span)
     var typecode = TYPE_CLASS_NUMBER
-    if (asInteger) {
-      typecode += TYPE_NUMBER_FLAG_DECIMAL
-    }
-    // //TYPE_DATETIME_VARIATION_TIME
-    if (hasSign) typecode += TYPE_NUMBER_FLAG_SIGNED
-    editor.inputType = typecode
     var image = initialValue.toString()
-    if (asInteger) {//must clip trailing .0 or the EditText widget adds a trailing 0 to the returned number
-      val clipat = image.indexOfFirst { it == '.' }
-      if (clipat >= 0) {//todo: see what 0..-1 does in slice
-        image = image.slice(0..clipat - 1)  //
+    if (fixBug) {
+      if (asInteger) {//must clip trailing .0 or the EditText widget adds a trailing 0 to the returned number
+        val clipat = image.indexOfFirst { it == '.' }
+        if (clipat >= 0) {//todo: see what 0..-1 does in slice
+          image = image.slice(0..clipat - 1)  //
+        }
+      } else {
+        typecode += TYPE_NUMBER_FLAG_DECIMAL
       }
     }
+    if (hasSign) typecode += TYPE_NUMBER_FLAG_SIGNED
+    editor.inputType = typecode
     editor.setText(image)
     return editor
   }
@@ -139,9 +124,9 @@ class GridManager(context: Context) : GridLayout(context) {
     return button
   }
 
-  fun addButton(legend: CharSequence, action: View.OnClickListener): Button {
-    return addButton(legend, 1, action)
-  }
+//  fun addButton(legend: CharSequence, action: View.OnClickListener): Button {
+//    return addButton(legend, 1, action)
+//  }
 
   fun addButton(legend: CharSequence, span: Int, action: View.OnClickListener?): Button {
     val button = addButton(legend, span)
@@ -151,13 +136,30 @@ class GridManager(context: Context) : GridLayout(context) {
     return button
   }
 
-  fun addLauncher(legend: CharSequence, cls: Class<out Activity>): ActivityLauncher {
-    val button = ActivityLauncher(legend, context, cls)
-    return add(button, 1, false)
+
+  /** trying to do this with just functionals was annoying*/
+  class ToggleButton(context: Context, val whenOn:CharSequence, val whenOff:CharSequence, val action:(doit:Boolean)->Boolean) : Button(context) {
+    init {
+      setOnClickListener( { toggle()})
+      updateLegend(action(false))
+    }
+
+    fun toggle() {
+      val newstate=action(true) //invoke toggle, by using a return value we allow the toggler to veto the toggling.
+      updateLegend(newstate)
+    }
+
+    private fun updateLegend(newstate: Boolean) {
+      text = if (newstate) whenOn else whenOff
+    }
+
   }
 
-  fun addSlider(span: Int = -1): LinearSlider {
-    return add(LinearSlider::class.java, span, true)
+  /** @param action if sent a 1 to actually toggle, a 0 to read the present state, on toggle must return the new value of the state*/
+  fun addToggle(whenOn:CharSequence,whenOff:CharSequence,span:Int=1,wide:Boolean=false,action:(doit:Boolean)->Boolean):ToggleButton {
+    val button=ToggleButton(this.context,whenOn,whenOff,action)
+    add(button,span,wide)
+    return button
   }
 
-}//not yet finished
+}

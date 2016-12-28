@@ -1,5 +1,6 @@
 package pers.hal42.android
 
+import android.content.Context
 import android.content.Intent
 import android.support.v4.app.ActivityCompat
 import android.view.View
@@ -54,11 +55,13 @@ open class EasyActivity(columns:Int ) : GriddedActivity(columns) {
   }
 
   /** create and add button that when clicked launches an editor */
-  fun makeLauncher(connection: NumberEditor.Connection): Button {
-    val button = makeButton(connection.legend){
+  fun makeLauncher(connection: NumberEditor.Connection,span: Int=1): Button {
+    val button = makeButton(span,connection.legend){
       launch(connection)
     }
     return button
   }
+
+
   //todo: add facility for a click on a text view generating a new activity with a single view which has the same text as the clicked on textview.
 }
