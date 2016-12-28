@@ -1,5 +1,6 @@
 package pers.hal42.android
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
@@ -148,6 +149,33 @@ class GridManager(context: Context) : GridLayout(context) {
     if (action != null) {
       button.setOnClickListener(action)
     }
+    return button
+  }
+
+
+  @SuppressLint("ViewConstructor")
+  /** trying to do this with just functionals was annoying*/
+  class ToggleButton(context: Context, val whenOn: CharSequence, val whenOff: CharSequence, val action: (doit: Boolean) -> Boolean) : Button(context) {
+    init {
+      setOnClickListener({ toggle() })
+      updateLegend(action(false))
+    }
+
+    fun toggle() {
+      val newstate = action(true) //invoke toggle, by using a return value we allow the toggler to veto the toggling.
+      updateLegend(newstate)
+    }
+
+    private fun updateLegend(newstate: Boolean) {
+      text = if (newstate) whenOn else whenOff
+    }
+
+  }
+
+  /** @param action if sent a 1 to actually toggle, a 0 to read the present state, on toggle must return the new value of the state*/
+  fun addToggle(whenOn: CharSequence, whenOff: CharSequence, span: Int = 1, wide: Boolean = false, action: (doit: Boolean) -> Boolean): ToggleButton {
+    val button = ToggleButton(this.context, whenOn, whenOff, action)
+    add(button, span, wide)
     return button
   }
 

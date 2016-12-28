@@ -2,9 +2,10 @@ package pers.hal42.droid
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.WindowManager
-import pers.hal42.android.*
-import kotlin.reflect.KMutableProperty
+import pers.hal42.android.EasyActivity
+import pers.hal42.android.NumberEditor
+import pers.hal42.android.PolitePeriodicTimer
+import pers.hal42.android.ViewFormatter
 
 
 class DroidSampler : EasyActivity(3) {
@@ -12,21 +13,21 @@ class DroidSampler : EasyActivity(3) {
   internal val timing: PolitePeriodicTimer = PolitePeriodicTimer(1000)//once a second and startup stopped as we aren't init'd
 
 
-//  internal var sets: List<TimerSet>? = null
+  //  internal var sets: List<TimerSet>? = null
   internal val currentSet: TimerSet = TimerSet()
   internal var tremain: Int = 0
-  internal var running:Boolean =false
+  internal var running: Boolean = false
 
   private fun updateTimeview() {
-    if(running) {
+    if (running) {
       myView.cls()
       --tremain
-      if(tremain> 0) {
+      if (tremain > 0) {
         myView.format("{0}", tremain)
-      } else if(tremain<0){
+      } else if (tremain < 0) {
         if (tremain < -currentSet.totalTime()) {
           myView.format("Over >{0}!", currentSet.totalTime())
-          running=false
+          running = false
         } else {
           myView.format("Over {0}!", -tremain)
         }
@@ -43,26 +44,26 @@ class DroidSampler : EasyActivity(3) {
 
   private fun testTimer() {
     tremain = currentSet.totalTime()
-    running=true
+    running = true
     timing.resume()
   }
 
-/** */
+  /** */
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     makeColorButton("Greenish", Color.GREEN)
     makeColorButton("Yellowish", Color.YELLOW)
 //    makeColorButton("Redish", Color.RED)
-    makeLauncher(NumberEditor.Connection("Redish","set red time",{currentSet.red.toFloat()},{value->currentSet.red=value.toInt()}))
-    makeButton(-1,"Start Timer") { testTimer() }
+    makeLauncher(NumberEditor.Connection("Reddish", "set red time", true, false, { currentSet.red.toFloat() }, { value -> currentSet.red = value.toInt() }))
+    makeButton(-1, "Start Timer") { testTimer() }
 
     myView.printf("Toast Timer")  //this reference to myView creates it so must occur in an appropriate place to set its screen position.
 
     //we will eventually make this more dynamic
 //    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    myView.view.keepScreenOn=true
+    myView.view.keepScreenOn = true
 
-    timing.tasklist.add {updateTimeview()}
+    timing.tasklist.add { updateTimeview() }
   }
 
   /** a button that when pressed sets the background of the text area to the given @param colorcode */
@@ -92,13 +93,6 @@ class DroidSampler : EasyActivity(3) {
       } else {
         return Color.MAGENTA
       }
-    }
-
-    //hack for testing
-    fun distribute(total: Int, long: Float = 0.6F, medium: Float = 0.3F, short: Float = 0.1F) {
-      red = (total * short).toInt()
-      green = (total * long).toInt()
-      yellow = (total * medium).toInt()
     }
 
   }
