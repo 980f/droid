@@ -117,19 +117,19 @@ class GridManager(context: Context) : GridLayout(context) {
   fun addNumberEntry(initialValue: Float, asInteger: Boolean = true, hasSign: Boolean = false, span: Int = -1): EditText {
     val editor = add(EditText::class.java, span)
     var typecode = TYPE_CLASS_NUMBER
-    if (asInteger) {
-      typecode += TYPE_NUMBER_FLAG_DECIMAL
-    }
-    // //TYPE_DATETIME_VARIATION_TIME
-    if (hasSign) typecode += TYPE_NUMBER_FLAG_SIGNED
-    editor.inputType = typecode
     var image = initialValue.toString()
+
     if (asInteger) {//must clip trailing .0 or the EditText widget adds a trailing 0 to the returned number
       val clipat = image.indexOfFirst { it == '.' }
       if (clipat >= 0) {//todo: see what 0..-1 does in slice
         image = image.slice(0..clipat - 1)  //
       }
+    } else {
+      typecode += TYPE_NUMBER_FLAG_DECIMAL
     }
+
+    if (hasSign) typecode += TYPE_NUMBER_FLAG_SIGNED
+    editor.inputType = typecode
     editor.setText(image)
     return editor
   }
