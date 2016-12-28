@@ -3,7 +3,7 @@ package pers.hal42.android
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
-import android.text.InputType.TYPE_CLASS_NUMBER
+import android.text.InputType.*
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -73,7 +73,7 @@ class GridManager(context: Context) : GridLayout(context) {
     if (fillWidth) {
       layout.setGravity(Gravity.FILL_HORIZONTAL)
     }
-    super.addView(viewObject, layout)//
+    super.addView(viewObject, layout) //
     return viewObject
   }
 
@@ -113,10 +113,23 @@ class GridManager(context: Context) : GridLayout(context) {
     return editor
   }
 
-  fun addNumberEntry(initialValue: Float, span: Int = -1): EditText {
+  fun addNumberEntry(initialValue: Float, asInteger: Boolean = true, hasSign: Boolean = false, span: Int = -1): EditText {
     val editor = add(EditText::class.java, span)
-    editor.inputType = TYPE_CLASS_NUMBER
-    editor.setText(initialValue.toString())
+    var typecode = TYPE_CLASS_NUMBER
+    if (asInteger) {
+      typecode += TYPE_NUMBER_FLAG_DECIMAL
+    }
+    // //TYPE_DATETIME_VARIATION_TIME
+    if (hasSign) typecode += TYPE_NUMBER_FLAG_SIGNED
+    editor.inputType = typecode
+    var image = initialValue.toString()
+    if (asInteger) {//must clip trailing .0 or the EditText widget adds a trailing 0 to the returned number
+      val clipat = image.indexOfFirst { it == '.' }
+      if (clipat >= 0) {//todo: see what 0..-1 does in slice
+        image = image.slice(0..clipat - 1)  //
+      }
+    }
+    editor.setText(image)
     return editor
   }
 

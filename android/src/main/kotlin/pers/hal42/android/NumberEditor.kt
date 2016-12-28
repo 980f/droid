@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.widget.EditText
 
+val dbg= Logger("NumberEditor")
 
 /** edit the given property */
 class NumberEditor() : EasyActivity(1) {
@@ -41,9 +42,11 @@ class NumberEditor() : EasyActivity(1) {
         image?.let {
           try {
             val result = image.toFloat()
+            dbg.i("As string: %s, as number: %f",image,result)
             setter(result)
           } catch (ex: NumberFormatException) {
             //don't call anything.
+            dbg.e("Bad Format: %s",image)
           }
         }
       }
@@ -68,12 +71,12 @@ class NumberEditor() : EasyActivity(1) {
     val desc = intent.getStringExtra("desc")//,"Unknown item")
     makeText(-1).format(desc, starting)
     editor = gridManager.addNumberEntry(starting)
-    editor!!.selectAll()
+    editor!!.selectAll()  //but touching the widget to bring up the keyboard only deletes one character (occasionally none)
     editor!!.setOnEditorActionListener { p0, p1, p2 ->
       onEditorAction(p1)
       true
     }
-    editor!!.showSoftInputOnFocus=true  //despite upping sdk leve this does not do what it suggests it does.
+    editor!!.showSoftInputOnFocus=true  //despite upping sdk level this does not do what it suggests it does.
 //    editor.
   }
 }

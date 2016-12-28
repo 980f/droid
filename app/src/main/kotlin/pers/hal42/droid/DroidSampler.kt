@@ -47,7 +47,7 @@ class DroidSampler : EasyActivity(3) {
     timing.resume()
   }
 
-/***/
+/** */
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     makeColorButton("Greenish", Color.GREEN)
