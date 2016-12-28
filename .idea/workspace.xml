@@ -10,20 +10,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d7588395-6604-4034-a057-7743e3cfcae7" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/ActivityLauncher.kt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/LinearSlider.kt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/util/Storable.kt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/util/StoredProperties.kt" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/android.iml" afterPath="$PROJECT_DIR$/android/android.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/EasyActivity.kt" afterPath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/EasyActivity.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/GridManager.kt" afterPath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/GridManager.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/GriddedActivity.kt" afterPath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/GriddedActivity.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/NumberEditor.kt" afterPath="$PROJECT_DIR$/android/src/main/kotlin/pers/hal42/android/NumberEditor.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/kotlin/pers/hal42/droid/DroidSampler.kt" afterPath="$PROJECT_DIR$/app/src/main/kotlin/pers/hal42/droid/DroidSampler.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-    </list>
+    <list default="true" id="d7588395-6604-4034-a057-7743e3cfcae7" name="Default" comment="" />
     <ignored path="droid.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="*.bak" />
@@ -3316,7 +3303,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="31" y="18" width="1335" height="750" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
@@ -3337,7 +3324,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39747635" sideWeight="0.52977574" order="11" side_tool="true" content_ui="tabs" />
+      <window_info id="Gradle Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39747635" sideWeight="0.52977574" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21964423" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32838038" sideWeight="0.4856922" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
