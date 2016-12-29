@@ -18,18 +18,18 @@ class DroidSampler : EasyActivity(2) {
     set(value) {
       myView.printf("\nred set to: %d", value)
     }
-  internal var floating=false
+  internal var floating = false
 
-  fun toggleFloating( doit:Boolean ):Boolean {
-    if(doit) {
+  fun toggleFloating(doit: Boolean): Boolean {
+    if (doit) {
       floating = !floating
     }
     return floating
   }
 
-  fun toggleBuggy( doit:Boolean ):Boolean {
-    if(doit) {
-      gridManager.fixBug = ! gridManager.fixBug
+  fun toggleBuggy(doit: Boolean): Boolean {
+    if (doit) {
+      gridManager.fixBug = !gridManager.fixBug
     }
     return gridManager.fixBug
   }
@@ -38,10 +38,10 @@ class DroidSampler : EasyActivity(2) {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     makeButton("Show Value") { red = red }
-    makeButton("Clear Display") {myView.cls()}
-    gridManager.addToggle("Integer","Floating") {v-> toggleFloating(v) }
-    gridManager.addToggle("Buggy","Bug Fixed") { v->toggleBuggy(v) }
-    makeLauncher(NumberEditor.Connection("Edit Value", "set red time (seconds)", floating, false,{ red.toFloat() }, { value -> red = value.toInt() }),-1)
+    makeButton("Clear Display") { myView.cls() }
+    gridManager.addToggle("Integer", "Floating") { v -> toggleFloating(v) }
+    gridManager.addToggle("Buggy", "Bug Fixed") { v -> toggleBuggy(v) }
+    makeLauncher(NumberEditor.Connection("Edit Value", "set red time (seconds)", floating, false, { red.toFloat() }, { value -> red = value.toInt() }), -1)
 
     //this reference to myView creates it so must occur in an appropriate place to set its screen position.
     myView.printf("Click Popup the Editor to test\nToggle the bug to disable the workaround")

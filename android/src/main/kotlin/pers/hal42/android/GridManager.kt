@@ -157,7 +157,7 @@ class GridManager(context: Context) : GridLayout(context) {
 
   /** @param action if sent a 1 to actually toggle, a 0 to read the present state, on toggle must return the new value of the state*/
   fun addToggle(whenOn:CharSequence,whenOff:CharSequence,span:Int=1,wide:Boolean=false,action:(doit:Boolean)->Boolean):ToggleButton {
-    val button=ToggleButton(this.context,whenOn,whenOff,action)
+    val button = ToggleButton(context, whenOn, whenOff, action)
     add(button,span,wide)
     return button
   }
