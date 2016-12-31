@@ -7,6 +7,7 @@ import pers.hal42.android.NumberEditor
 import pers.hal42.android.PolitePeriodicTimer
 import pers.hal42.android.ViewFormatter
 import kotlin.reflect.KMutableProperty
+import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KProperty
 
 
@@ -23,7 +24,6 @@ class DroidSampler : EasyActivity(3) {
   private fun doubleProp(prop:KMutableProperty<Int> ){
     prop.setter.call (this,2+prop.getter.call(this))
   }
-
 
   private fun updateTimeview() {
     if (running) {
@@ -75,6 +75,7 @@ class DroidSampler : EasyActivity(3) {
     myView.printf("\n local arg ${tremain}")
 
     var prop=DroidSampler::tremain
+
     doubleProp(prop)
     myView.printf("\n local arg ${tremain}")
 
