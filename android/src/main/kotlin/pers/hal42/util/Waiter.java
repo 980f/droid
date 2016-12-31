@@ -39,7 +39,7 @@ public class Waiter {
    * Wait. primary use is to shorten successive timeouts when we sleep again
    * after ignoring an interrupt, conveniently also provides a response time
    */
-  private StopWatch resleeper = new StopWatch();
+  private final StopWatch resleeper = new StopWatch();
   private Status state = Status.Ready;
   /**
    * waitOnMe, safe object to do actual thread wait's on.
@@ -172,7 +172,7 @@ public class Waiter {
       } catch(Exception ex) {
         state = Status.Excepted;
       } finally {
-        resleeper.Stop();//for a valiant attempt at figuring out when a problem occured.
+        resleeper.Stop();
       }
       return state();
     }//end synch
