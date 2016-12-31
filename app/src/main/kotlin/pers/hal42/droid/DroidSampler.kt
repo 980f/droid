@@ -6,6 +6,8 @@ import pers.hal42.android.EasyActivity
 import pers.hal42.android.NumberEditor
 import pers.hal42.android.PolitePeriodicTimer
 import pers.hal42.android.ViewFormatter
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.KProperty
 
 
 class DroidSampler : EasyActivity(3) {
@@ -17,6 +19,11 @@ class DroidSampler : EasyActivity(3) {
   internal val currentSet: TimerSet = TimerSet()
   internal var tremain: Int = 0
   internal var running: Boolean = false
+
+  private fun doubleProp(prop:KMutableProperty<Int> ){
+    prop.setter.call (this,2+prop.getter.call(this))
+  }
+
 
   private fun updateTimeview() {
     if (running) {
@@ -64,6 +71,13 @@ class DroidSampler : EasyActivity(3) {
     myView.view.keepScreenOn = true
 
     timing.tasklist.add { updateTimeview() }
+
+    myView.printf("\n local arg ${tremain}")
+
+    var prop=DroidSampler::tremain
+    doubleProp(prop)
+    myView.printf("\n local arg ${tremain}")
+
   }
 
   /** a button that when pressed sets the background of the text area to the given @param colorcode */
