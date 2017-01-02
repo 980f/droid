@@ -39,12 +39,14 @@ class DroidSampler : EasyActivity(2) {
     super.onCreate(savedInstanceState)
     makeButton("Show Value") { red = red }
     makeButton("Clear Display") { myView.cls() }
-    gridManager.addToggle("Integer", "Floating") { v -> toggleFloating(v) }
-    gridManager.addToggle("Buggy", "Bug Fixed") { v -> toggleBuggy(v) }
+    gridManager.addToggle("Floating", "Integer") { v -> toggleFloating(v) }
+    gridManager.addToggle("Bug Fixed","Buggy") { v -> toggleBuggy(v) }
     makeLauncher(NumberEditor.Connection("Edit Value", "set red time (seconds)", floating, false, { red.toFloat() }, { value -> red = value.toInt() }), -1)
 
     //this reference to myView creates it so must occur in an appropriate place to set its screen position.
     myView.printf("Click Popup the Editor to test\nToggle the bug to disable the workaround")
+    myView.printf("\nrev 16")
+
 
   }
 
