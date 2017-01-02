@@ -7,7 +7,10 @@ import android.widget.EditText
 
 val dbg = Logger("NumberEditor")
 
-/** edit the given property */
+/** edit the given property
+ * until we can figure out how to get Kotlin to give us a property with reasonable syntax we pass the setter and getter.
+ * As of this note the '::' operator only works on a native object, not an instance of a class
+ * */
 class NumberEditor() : EasyActivity(1) {
 
   class Connection(val legend: String, val desc: String, val asInteger: Boolean, val hasSign: Boolean, val getter: () -> Float, val setter: (Float) -> Unit) {

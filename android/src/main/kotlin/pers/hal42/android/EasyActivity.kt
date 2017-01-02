@@ -40,6 +40,7 @@ open class EasyActivity(columns: Int) : GriddedActivity(columns) {
   val popups: MutableMap<Int, NumberEditor.Connection> = HashMap()
 
   fun launch(connection: NumberEditor.Connection) {
+    Dbg.i("launch connection %s [%x]", connection.toString(),connection.uniqueID())
     val intent = Intent(applicationContext, NumberEditor::class.java)
     connection.sendParams(intent)
     popups[connection.uniqueID()] = connection
