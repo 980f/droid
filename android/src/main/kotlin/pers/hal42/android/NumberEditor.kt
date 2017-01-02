@@ -8,7 +8,7 @@ import android.widget.EditText
 val dbg = Logger("NumberEditor")
 
 /** edit the given property */
-class NumberEditor : EasyActivity(1) {
+class NumberEditor() : EasyActivity(1) {
 
   class Connection(val legend: String, val desc: String, val asInteger: Boolean, val hasSign: Boolean, val getter: () -> Float, val setter: (Float) -> Unit) {
 
