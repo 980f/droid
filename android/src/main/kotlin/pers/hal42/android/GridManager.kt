@@ -10,10 +10,12 @@ import android.widget.GridLayout
 
 /**
  * Copyright andyh  10/17/12 3:55 PM
- * todo: "clear screen" and reset cursor.
  */
 class GridManager(context: Context) : GridLayout(context) {
-  var fixBug = true
+  val dbg: Logger= Logger(GridManager::class.simpleName)
+  companion object {
+    var fixBug = false
+  }
 
   /**
    * grid position generator.
@@ -100,19 +102,26 @@ class GridManager(context: Context) : GridLayout(context) {
 
   fun addNumberEntry(initialValue: Float, asInteger: Boolean = true, hasSign: Boolean = false, span: Int = -1): EditText {
     val editor = add(EditText::class.java, span)
-    var typecode = TYPE_CLASS_NUMBER
+    var typecode = TYPE_CLASS_NUMBER   //x2
     var image = initialValue.toString()
+
+    dbg.i("\n starting image <%s> as %x",image,typecode)
+
     if (fixBug) {
       if (asInteger) {//must clip trailing .0 or the EditText widget adds a trailing 0 to the returned number
         val clipat = image.indexOfFirst { it == '.' }
         if (clipat >= 0) {//todo: see what 0..-1 does in slice
           image = image.slice(0..clipat - 1)  //
+          dbg.i(" clipped to <%s>",image)
         }
       } else {
-        typecode += TYPE_NUMBER_FLAG_DECIMAL
+        typecode += TYPE_NUMBER_FLAG_DECIMAL   //x2000
       }
     }
-    if (hasSign) typecode += TYPE_NUMBER_FLAG_SIGNED
+    if (hasSign) {
+      typecode += TYPE_NUMBER_FLAG_SIGNED   //x1000
+    }
+    dbg.i(" typecode %x",typecode)
     editor.inputType = typecode
     editor.setText(image)
     return editor
@@ -127,15 +136,15 @@ class GridManager(context: Context) : GridLayout(context) {
 //  fun addButton(legend: CharSequence, action: View.OnClickListener): Button {
 //    return addButton(legend, 1, action)
 //  }
-
-  fun addButton(legend: CharSequence, span: Int, action: View.OnClickListener?): Button {
-    val button = addButton(legend, span)
-    if (action != null) {
-      button.setOnClickListener(action)
-    }
-    return button
-  }
-
+//
+//  fun addButton(legend: CharSequence, span: Int, action: View.OnClickListener?): Button {
+//    val button = addButton(legend, span)
+//    if (action != null) {
+//      button.setOnClickListener(action)
+//    }
+//    return button
+//  }
+//
 
   /** trying to do this with just functionals was annoying*/
   class ToggleButton(context: Context, val whenOn:CharSequence, val whenOff:CharSequence, val action:(doit:Boolean)->Boolean) : Button(context) {
@@ -157,7 +166,7 @@ class GridManager(context: Context) : GridLayout(context) {
 
   /** @param action if sent a 1 to actually toggle, a 0 to read the present state, on toggle must return the new value of the state*/
   fun addToggle(whenOn:CharSequence,whenOff:CharSequence,span:Int=1,wide:Boolean=false,action:(doit:Boolean)->Boolean):ToggleButton {
-    val button=ToggleButton(this.context,whenOn,whenOff,action)
+    val button = ToggleButton(context, whenOn, whenOff, action)
     add(button,span,wide)
     return button
   }

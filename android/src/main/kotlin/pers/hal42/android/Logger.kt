@@ -7,18 +7,20 @@ import android.util.Log
  * convenience wrapper on android Log usage, not having to type a tag at each place of use.
  * Also serves as a nice place to set breakpoints to trap otherwise discarded exception messages.
  */
-class Logger(val logTag: String) {
+class Logger(val logTag: String?) {
 
   fun i(format: String, vararg args: Any) {
-    Log.i(logTag, String.format(format, *args))
+    Log.i(logTag?:"?", String.format(format, *args))
   }
 
   fun d(format: String, vararg args: Any) {
-    Log.d(logTag, String.format(format, *args))
+    Log.d(logTag?:"?", String.format(format, *args))
   }
 
   fun e(format: String, vararg args: Any) {
-    Log.e(logTag, String.format(format, *args))
+    Log.e(logTag?:"?", String.format(format, *args))
   }
 
 }
+
+val Dbg=Logger("Application")

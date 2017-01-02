@@ -4,16 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.widget.EditText
-import pers.hal42.android.NumberEditor.Connection.X.asIntegerKey
-import pers.hal42.android.NumberEditor.Connection.X.descKey
-import pers.hal42.android.NumberEditor.Connection.X.startingKey
 
 val dbg= Logger("NumberEditor")
 
-/** edit the given property */
+/** edit the given property
+ * until we can figure out how to get Kotlin to give us a property with reasonable syntax we pass the setter and getter.
+ * As of this note the '::' operator only works on a native object, not an instance of a class
+ * */
 class NumberEditor() : EasyActivity(1) {
 
-  class Connection(val legend: String, val desc: String,val asInteger:Boolean,val hasSign:Boolean, val getter: () -> Float, val setter: (Float) -> Unit) {
+  //asInteger made var so that we can alter nature of it for demoing EditText bug, should be a val.
+  class Connection(val legend: String, val desc: String,var asInteger:Boolean,val hasSign:Boolean, val getter: () -> Float, val setter: (Float) -> Unit) {
 
     companion object X {
       //todo: reflection
