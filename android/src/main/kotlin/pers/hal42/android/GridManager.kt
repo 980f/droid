@@ -10,11 +10,12 @@ import android.widget.GridLayout
 
 /**
  * Copyright andyh  10/17/12 3:55 PM
- * todo: "clear screen" and reset cursor.
  */
 class GridManager(context: Context) : GridLayout(context) {
   val dbg: Logger= Logger(GridManager::class.simpleName)
-  var fixBug = false
+  companion object {
+    var fixBug = false
+  }
 
   /**
    * grid position generator.

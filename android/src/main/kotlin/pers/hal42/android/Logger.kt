@@ -22,3 +22,5 @@ class Logger(val logTag: String?) {
   }
 
 }
+
+val Dbg=Logger("Application")
